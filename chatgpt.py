@@ -38,7 +38,18 @@ async def reset(session: CommandSession):
 @on_natural_language(only_to_me=True, only_short_message=False, permission=perm.SUPERUSER)
 async def chatgpt(session: NLPSession):
     global qq, conversation_id, parent_id
-    if str(session.ctx['user_id']) == qq:
+    try:
+        if str(session.ctx['user_id']) == qq:
+            if parent_id and conversation_id:
+                gpt.conversation_id = conversation_id
+                gpt.parent_id = parent_id
+            msg = session.msg_text.strip()
+            res = gpt.get_chat_response(msg)
+            conversation_id = res["conversation_id"]
+            parent_id = res["parent_id"]
+            await session.send(res['message'])
+    except:
+        gpt.refresh_session()
         if parent_id and conversation_id:
             gpt.conversation_id = conversation_id
             gpt.parent_id = parent_id
