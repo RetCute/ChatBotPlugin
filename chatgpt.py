@@ -18,7 +18,8 @@ async def startchatgpt(session: CommandSession):
         await session.finish("当前有人正在使用chatgpt!请稍后再试!")
     else:
         qq = str(session.ctx['user_id'])
-        await session.finish("成功开启chatgpt!")
+        gpt.reset_chat()
+        await session.send("成功开启chatgpt!")
 
 @on_command("!stopchatgpt", only_to_me=True, permission=perm.SUPERUSER)
 async def stopchatgpt(session: CommandSession):
@@ -26,14 +27,14 @@ async def stopchatgpt(session: CommandSession):
     qq = None
     parent_id = None
     conversation_id = None
-    await session.finish("成功关闭chatgpt!")
+    await session.send("成功关闭chatgpt!")
 
 @on_command("!reset", only_to_me=True, permission=perm.SUPERUSER)
 async def reset(session: CommandSession):
     global qq
     if qq == str(session.ctx['user_id']):
         gpt.reset_chat()
-        await session.finish("对话已刷新!")
+        await session.send("对话已重置!")
 
 @on_natural_language(only_to_me=True, only_short_message=False, permission=perm.SUPERUSER)
 async def chatgpt(session: NLPSession):
