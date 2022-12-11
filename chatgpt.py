@@ -48,13 +48,5 @@ async def chatgpt(session: NLPSession):
             conversation_id = res["conversation_id"]
             parent_id = res["parent_id"]
             await session.send(res['message'])
-    except:
-        gpt.refresh_session()
-        if parent_id and conversation_id:
-            gpt.conversation_id = conversation_id
-            gpt.parent_id = parent_id
-        msg = session.msg_text.strip()
-        res = gpt.get_chat_response(msg)
-        conversation_id = res["conversation_id"]
-        parent_id = res["parent_id"]
-        await session.send(res['message'])
+    except Exception as e:
+        await session.send(str(e))
