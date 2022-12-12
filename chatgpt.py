@@ -36,6 +36,21 @@ async def reset(session: CommandSession):
         gpt.reset_chat()
         await session.send("对话已重置!")
 
+@on_command("!updatetoken", only_to_me=True, permission=perm.SUPERUSER)
+async def updatetoken(session: CommandSession):
+    global gpt
+    parser = ArgumentParser(session=session)
+    parser.add_argument('-t', '--token', type=str, default=None)
+    args = parser.parse_args(session.argv)
+    token = args.token
+    try:
+        gpt = Chatbot({
+            "Authorization": "<Your Bearer Token Here>",
+            "session_token": token})
+        await session.finish("Session Token更新成功!")
+    except Exception as e:
+        await session.finish(str(e))
+
 @on_natural_language(only_to_me=True, only_short_message=False, permission=perm.SUPERUSER)
 async def chatgpt(session: NLPSession):
     global qq, conversation_id, parent_id
