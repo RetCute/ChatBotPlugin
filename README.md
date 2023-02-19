@@ -1,2 +1,2 @@
-# ChatGPTBot
-A HoshinoBot Plugin For ChatGPT
+# NewBingBot
+A HoshinoBot Plugin For NewBing
